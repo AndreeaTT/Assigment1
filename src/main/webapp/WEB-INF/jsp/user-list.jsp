@@ -30,7 +30,7 @@
             <th>Username</th>
             <th>Password</th>
             <th>Role</th>
-            <th></th>
+            <th>Action</th>
         </tr>
         </thead>
 
@@ -47,10 +47,10 @@
                 <spring:url value="/history/list/${user.id}" var="historyUrl"/>
 
 
-                <td><button class="btn btn-success" onclick="location.href='${userUrl}'">Info</button></td>
-                <td><button class="btn btn-primary" onclick="location.href='${updateUrl}'">Update</button>
-                <td><button class="btn btn-danger" onclick="this.disabled=true;post('${deleteUrl}')">Delete</button></td>
-                <td><button class="btn btn-warning" onclick="location.href('${historyUrl}')">History</button></td>
+                <td><button class="btn btn-success" onclick="location.href='${userUrl}'">Info</button>
+                <button class="btn btn-primary" onclick="location.href='${updateUrl}'">Update</button>
+                <button class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/user/delete/${user.id}.html'">Delete</button>
+                <button class="btn btn-warning" onclick="location.href='${historyUrl}'">History</button></td>
 
             </tr>
         </c:forEach>

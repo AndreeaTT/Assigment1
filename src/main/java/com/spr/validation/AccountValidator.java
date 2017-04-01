@@ -31,11 +31,21 @@ public class AccountValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "clientID", "account.client.empty");
         ValidationUtils.rejectIfEmpty(errors, "amount", "account.amount.empty");
 
-        if (account.getAmount() < 0.0)
+        if (account.getAmount() != null)
+        if (Double.compare(account.getAmount() , new Double(0.0) )< 0)
             errors.rejectValue("amount", "account.amount.value");
 
-        if (clientService.findById(account.getClientID()) == null)
-            errors.rejectValue("clientID", "account.client.invalid");
+        if (account.getClientID() != null)
+            if (clientService.findById(account.getClientID()) == null)
+                 errors.rejectValue("clientID", "account.client.invalid");
 
+        if (!(account.getClientID() instanceof Integer))
+            errors.rejectValue("clientID", "account.client.integer");
+
+        if (!(account.getAmount() instanceof Double))
+            errors.rejectValue("clientID", "account.amount.double");
+
+       // if (account.getTypeAccount().equalsIgnoreCase("NONE"))
+        //    errors.rejectValue("typeAccount", "account.typeAccount.empty");
     }
 }

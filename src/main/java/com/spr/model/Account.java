@@ -15,12 +15,16 @@ public class Account {
     @GeneratedValue
     private Integer id;
 
+    @Column(name = "clientID")
     private Integer clientID;
 
+    @Column(name = "typeAccount")
     private String typeAccount;
 
+    @Column(name = "amount")
     private Double amount;
 
+    @Column(name = "createData")
     private Date createData;
 
     public Integer getId() {

@@ -20,9 +20,26 @@ public class ClientValidator implements Validator {
         Client client = (Client) target;
 
         ValidationUtils.rejectIfEmpty(errors, "name", "client.name.empty");
+        ValidationUtils.rejectIfEmpty(errors, "address", "client.address.empty");
+
+        if (client.getCardNumber() != null)
         if (client.getCardNumber().length() != 16)
             errors.rejectValue("cardNumber", "client.cardNumber.length");
+
+        if (client.getNumericCode() != null)
         if (client.getNumericCode().length() != 13)
             errors.rejectValue("numericCode", "client.numericCode.length");
+
+        if (client.getCardNumber() != null)
+        if (!(client.getCardNumber().matches("[0-9]+")))
+            errors.rejectValue("cardNumber", "client.cardNumber.invalid");
+
+        if (client.getNumericCode() != null)
+        if (!(client.getNumericCode().matches("[0-9]+")))
+            errors.rejectValue("numericCode", "client.numericCode.invalid");
+
+        if (client.getName() != null)
+        if (!(client.getName().matches("[a-zA-Z]+")))
+            errors.rejectValue("name", "client.name.invalid");
     }
 }

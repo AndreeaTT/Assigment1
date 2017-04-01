@@ -29,22 +29,22 @@ public class HistoryController{
 
     @RequestMapping(value="/list/{id}", method= RequestMethod.GET)
     public ModelAndView historyListPage(@PathVariable Integer id) {
-        ModelAndView mav = new ModelAndView("history-list");
+        ModelAndView mav = new ModelAndView("history-list-all");
         List<History> historyList = historyService.findByUser(id);
         mav.addObject("historyList", historyList);
         return mav;
     }
 
     @RequestMapping(value="/list/{id}", method=RequestMethod.POST)
-    public ModelAndView editClient(@ModelAttribute @Valid History history,
+    public ModelAndView historyPage(@ModelAttribute @Valid History history,
                                    BindingResult result,
                                    @PathVariable Integer id,
                                    final RedirectAttributes redirectAttributes) throws HistoryNotFound {
 
         if (result.hasErrors())
-            return new ModelAndView("history-list");
+            return new ModelAndView("home");
 
-        ModelAndView mav = new ModelAndView("history-list");
+        ModelAndView mav = new ModelAndView("history-list-all");
         List<History> historyList = historyService.findByUser(id);
         mav.addObject("historyList", historyList);
         return mav;
@@ -55,6 +55,14 @@ public class HistoryController{
         ModelAndView mav = new ModelAndView("history-list-all");
         List<History> historyList = historyService.findHistory();
         mav.addObject("historyList", historyList);
+        return mav;
+    }
+
+    @RequestMapping(value="/{id}", method=RequestMethod.GET)
+    public ModelAndView showHistoryPage(@PathVariable Integer id) {
+        ModelAndView mav = new ModelAndView("history-detail");
+        History history = historyService.findById(id);
+        mav.addObject("history", history);
         return mav;
     }
 }

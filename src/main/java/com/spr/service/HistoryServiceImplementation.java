@@ -24,16 +24,56 @@ public class HistoryServiceImplementation implements HistoryService{
 
     @Override
     @Transactional
-    public History create(History history, Integer userID, String action){
+    public History createUser(Integer userID, String action){
+        History history = new History();
+
+        String description = action + " " + userID.toString();
         history.setUserID(userID);
-        history.setAction(action);
+        history.setAction(description);
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date currentDate = calendar.getTime();
         java.sql.Date date = new java.sql.Date(currentDate.getTime());
         history.setActionData(date);
+        return historyRepository.save(history);
+    }
 
-        return history;
+    @Override
+    @Transactional
+    public History createAccount(Integer userID, Integer accountID, Integer clientID, String action){
+        History history = new History();
+
+        String description;
+
+        if (action.contains("transfer"))
+            description = action + " " + accountID.toString() + " " + "for client with ID: " + clientID.toString();
+        else
+            description = action + " " + accountID.toString() + " " + "to account with ID " + clientID.toString();
+
+        history.setUserID(userID);
+        history.setAction(description);
+
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date currentDate = calendar.getTime();
+        java.sql.Date date = new java.sql.Date(currentDate.getTime());
+        history.setActionData(date);
+        return historyRepository.save(history);
+    }
+
+    @Override
+    @Transactional
+    public History createClient(Integer userID, Integer clientID, String action){
+        History history = new History();
+
+        String description = action + " " + clientID.toString();
+        history.setUserID(userID);
+        history.setAction(description);
+
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date currentDate = calendar.getTime();
+        java.sql.Date date = new java.sql.Date(currentDate.getTime());
+        history.setActionData(date);
+        return historyRepository.save(history);
     }
 
     @Override
@@ -46,5 +86,11 @@ public class HistoryServiceImplementation implements HistoryService{
     @Transactional
     public List<History> findHistory(){
         return historyRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public History findById(Integer id){
+        return historyRepository.findOne(id);
     }
 }

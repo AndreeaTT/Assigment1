@@ -15,5 +15,4 @@ public interface AccountService {
     public Account delete(Integer id)throws AccountNotFound;
     public Account findById(Integer id);
     public List<Account> findAccounts();
-    public Account transferMoney(Integer id1, Integer id2, Double value);
 }

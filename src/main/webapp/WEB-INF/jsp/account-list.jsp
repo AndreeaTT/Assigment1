@@ -26,11 +26,12 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th width="50px">ID</th>
-            <th width="50px">ClientID</th>
-            <th width="50px">TypeAccount</th>
-            <th width="50px">Amount</th>
-            <th width="50px">CreateData</th>
+            <th>ID</th>
+            <th>ClientID</th>
+            <th>TypeAccount</th>
+            <th>Amount</th>
+            <th>CreateData</th>
+            <th>Action</th>
         </tr>
         </thead>
     <c:forEach var="account" items="${accountList}">
@@ -45,9 +46,9 @@
             <spring:url value="/account/edit/${account.id}" var="updateUrl" />
             <spring:url value="/account/delete/${account.id}" var="deleteUrl" />
 
-            <button class="btn btn-success" onclick="location.href='${accountUrl}'">Info</button>
+            <td><button class="btn btn-success" onclick="location.href='${accountUrl}'">Info</button>
             <button class="btn btn-warning" onclick="location.href='${updateUrl}'">Update</button>
-            <button class="btn btn-danger" onclick="location.href='${deleteUrl}'">Delete</button>
+            <button class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/account/delete/${account.id}.html'">Delete</button>></td>
         </tr>
     </c:forEach>
     </tbody>

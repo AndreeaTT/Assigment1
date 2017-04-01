@@ -33,18 +33,20 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    @InitBinder
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(userValidator);
+    }
+
     @RequestMapping(value="/create", method= RequestMethod.GET)
     public ModelAndView newUserPage() {
-        HashMap<String, Object> model = new HashMap<String, Object>();
-        model.put("user", new User());
-        model.put("history", new History());
 
-        ModelAndView mav = new ModelAndView("user-add", "user", model);
+        ModelAndView mav = new ModelAndView("user-add", "user", new User());
         return mav;
     }
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
-    public ModelAndView createNewUser(@ModelAttribute @Valid HashMap<String, Object> model,
+    public ModelAndView createNewUser(@ModelAttribute @Valid User user,
                                       BindingResult result,
                                       final RedirectAttributes redirectAttributes) {
 
@@ -52,12 +54,11 @@ public class UserController {
             return new ModelAndView("user-add", populateDefaultModel());
         }
 
-        User user = ((User)model.get("user"));
         String message = "New user was successfully created.";
-        String action = "New account created for " + user.getId();
-
         userService.create(user);
-        historyService.create((History)model.get("history"), new Integer(1), action);
+
+        String action = "Create new user with ID:";
+        historyService.createUser(user.getId(), action);
         ModelAndView mav = new ModelAndView("redirect:/index.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
@@ -67,6 +68,9 @@ public class UserController {
     public ModelAndView editUserPage(@PathVariable Integer id) {
         ModelAndView mav = new ModelAndView("user-edit");
         User user = userService.findById(id);
+
+        String action = "Edit user with ID:";
+        historyService.createUser(user.getId(), action);
         mav.addObject("user", user);
         return mav;
     }
@@ -103,8 +107,11 @@ public class UserController {
 
         ModelAndView mav = new ModelAndView("redirect:/index.html");
 
-        User account =userService.delete(id);
-        String message = "The user with : "+ account.getId() +" was successfully deleted.";
+        User user =userService.delete(id);
+        String message = "The user with : "+ user.getId() +" was successfully deleted.";
+
+        String action = "Delete user with ID:";
+        historyService.createUser(user.getId(), action);
 
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
@@ -128,7 +135,7 @@ public class UserController {
             return new ModelAndView("user-detail");
 
         ModelAndView mav = new ModelAndView("redirect:/index.html");
-        String message = "User was successfully updated.";
+        String message = "User was successfully found.";
 
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
@@ -143,22 +150,5 @@ public class UserController {
         model.put("role", rights);
 
         return model;
-    }
-
-    @RequestMapping(value="/login", method=RequestMethod.GET)
-    public ModelAndView loginForm() {
-        return new ModelAndView("login");
-    }
-
-    @RequestMapping(value="/error-login", method=RequestMethod.GET)
-    public ModelAndView invalidLogin() {
-        ModelAndView modelAndView = new ModelAndView("login");
-        modelAndView.addObject("error", true);
-        return modelAndView;
-    }
-
-    @RequestMapping(value="/success-login", method=RequestMethod.GET)
-    public ModelAndView successLogin() {
-        return new ModelAndView("home");
     }
 }

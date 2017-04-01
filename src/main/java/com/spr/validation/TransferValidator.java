@@ -32,14 +32,29 @@ public class TransferValidator implements Validator{
         ValidationUtils.rejectIfEmpty(errors, "receiverID", "transfer.receiver.empty");
         ValidationUtils.rejectIfEmpty(errors, "value", "transfer.value.empty");
 
+        if (transfer.getSenderID() != null)
         if (accountService.findById(transfer.getSenderID()) == null)
             errors.rejectValue("senderID", "transfer.sender.invalid");
+
+        if (transfer.getReceiverID() != null)
         if (accountService.findById(transfer.getReceiverID()) == null)
             errors.rejectValue("receiverID", "transfer.receiver.invalid");
 
+        if (transfer.getValue() != null)
         if (transfer.getValue() < 0.0)
             errors.rejectValue("value", "transfer.value.negative");
+
+        if (transfer.getValue() != null && transfer.getSenderID() != null)
         if (transfer.getValue() > accountService.findById(transfer.getSenderID()).getAmount())
             errors.rejectValue("value","transfer.value.toomuch");
+
+        if (!(transfer.getSenderID() instanceof Integer))
+            errors.rejectValue("clientID", "transfer.sender.integer");
+
+        if (!(transfer.getValue() instanceof Double))
+            errors.rejectValue("clientID", "transfer.balance.double");
+
+        if (!(transfer.getReceiverID() instanceof Integer))
+            errors.rejectValue("clientID", "transfer.receiver.integer");
     }
 }

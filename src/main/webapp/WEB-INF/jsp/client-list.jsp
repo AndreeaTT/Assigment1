@@ -26,11 +26,12 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th width="50px">ID</th>
-            <th width="50px">Name</th>
-            <th width="50px">CardNumber</th>
-            <th width="50px">CNP</th>
-            <th width="50px">Address</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>CardNumber</th>
+            <th>CNP</th>
+            <th>Address</th>
+            <th>Action</th>
         </tr>
         </thead>
     <c:forEach var="client" items="${clientList}">
@@ -44,8 +45,8 @@
             <spring:url value="/client/${client.id}" var="clientUrl" />
             <spring:url value="/client/edit/${client.id}" var="updateUrl" />
 
-            <button class="btn btn-success" onclick="location.href='${clientUrl}'">Info</button>
-            <button class="btn btn-warning" onclick="location.href='${updateUrl}'">Update</button>
+            <td><button class="btn btn-success" onclick="location.href='${clientUrl}'">Info</button>
+            <button class="btn btn-warning" onclick="location.href='${updateUrl}'">Update</button>></td>
         </tr>
     </c:forEach>
 </table>

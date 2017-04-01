@@ -12,13 +12,15 @@ public class User {
 
     @Id
     @GeneratedValue
-
     private Integer id;
 
+    @Column(name = "username")
     private String username;
 
+    @Column(name = "password")
     private String password;
 
+    @Column(name = "rights")
     private String rights;
 
     public Integer getId() {

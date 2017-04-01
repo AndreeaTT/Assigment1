@@ -13,7 +13,7 @@
 
     <h1>Add Client</h1>
 
-    <spring:url value="/client/add" var="clientActionUrl" />
+    <spring:url value="/client/create" var="clientActionUrl" />
 
     <form:form class="form-horizontal" method="POST" commandName="client" action="${clientActionUrl}">
 
@@ -33,8 +33,8 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <label class="col-sm-2 control-label">Card Number</label>
                 <div class="col-sm-10">
-                    <form:input path="name" type="text" class="form-control " id="cardNumber" placeholder="Card Number" />
-                    <form:errors path="name" class="control-label" />
+                    <form:input path="cardNumber" type="text" class="form-control " id="cardNumber" placeholder="Card Number" />
+                    <form:errors path="cardNumber" class="control-label" />
                 </div>
             </div>
         </spring:bind>

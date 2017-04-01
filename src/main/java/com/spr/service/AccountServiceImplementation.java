@@ -74,14 +74,4 @@ public class AccountServiceImplementation implements AccountService {
     public List<Account> findAccounts() {
         return accountRepository.findAll();
     }
-
-    @Override
-    @Transactional
-    public Account transferMoney(Integer id1, Integer id2, Double value) {
-        Account sender = accountRepository.findOne(id1);
-        Account receiver = accountRepository.findOne(id2);
-
-
-        return sender;
-    }
 }

@@ -2,7 +2,6 @@ package com.spr.controller;
 
 import com.spr.exception.AccountNotFound;
 import com.spr.model.Account;
-import com.spr.model.History;
 import com.spr.service.AccountService;
 import com.spr.service.HistoryService;
 import com.spr.validation.AccountValidator;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 
 /**
@@ -35,21 +32,20 @@ public class AccountController {
     @Autowired
     private AccountValidator accountValidator;
 
-
+    @InitBinder
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(accountValidator);
+    }
 
     @RequestMapping(value="/create", method= RequestMethod.GET)
     public ModelAndView newAccountPage() {
 
-        HashMap<String, Object> model = new HashMap<String, Object>();
-        model.put("account", new Account());
-        model.put("history", new History());
-
-        ModelAndView mav = new ModelAndView("account-add", "account", model);
+        ModelAndView mav = new ModelAndView("account-add", "account", new Account());
         return mav;
     }
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
-    public ModelAndView createNewAccount(@ModelAttribute @Valid HashMap<String, Object> model,
+    public ModelAndView createNewAccount(@ModelAttribute @Valid Account account,
                                         BindingResult result,
                                         final RedirectAttributes redirectAttributes) {
 
@@ -58,10 +54,10 @@ public class AccountController {
 
         ModelAndView mav = new ModelAndView();
         String message = "New account was successfully created.";
-        Account account = ((Account)model.get("account"));
-        String action = "New account created for " + account.getClientID();
         accountService.create(account);
-        historyService.create((History)model.get("history"), new Integer(1), action);
+
+        String action = "Create new account with ID:";
+        historyService.createAccount(account.getId(), account.getId(), account.getClientID(), action);
 
         mav.setViewName("redirect:/index.html");
         redirectAttributes.addFlashAttribute("message", message);
@@ -72,6 +68,9 @@ public class AccountController {
     public ModelAndView editAccountPage(@PathVariable Integer id) {
         ModelAndView mav = new ModelAndView("account-edit");
         Account account = accountService.findById(id);
+
+        String action = "Edit account with ID:";
+        historyService.createAccount(account.getId(), account.getId(), account.getClientID(), action);
         mav.addObject("account", account);
         return mav;
     }
@@ -110,6 +109,9 @@ public class AccountController {
         Account account = accountService.delete(id);
         String message = "The account with : "+ account.getId() +" was successfully deleted.";
 
+        String action = "Delete account with ID:";
+        historyService.createAccount(account.getId(), account.getId(), account.getClientID(), action);
+
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
@@ -132,7 +134,7 @@ public class AccountController {
             return new ModelAndView("account-detail");
 
         ModelAndView mav = new ModelAndView("redirect:/index.html");
-        String message = "Account was successfully updated.";
+        String message = "Account was successfully found.";
 
         redirectAttributes.addFlashAttribute("message", message);
         return mav;

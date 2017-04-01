@@ -32,6 +32,9 @@ public class ClientController {
     private ClientService clientService;
 
     @Autowired
+    private HistoryService historyService;
+
+    @Autowired
     private ClientValidator clientValidator;
 
     @InitBinder
@@ -55,8 +58,10 @@ public class ClientController {
 
         ModelAndView mav = new ModelAndView();
         String message = "New client:  "+client.getName()+" was successfully created.";
-
         clientService.create(client);
+
+        String action = "Create new client with ID:";
+        historyService.createClient(client.getId(), client.getId(), action);
 
         mav.setViewName("redirect:/index.html");
         redirectAttributes.addFlashAttribute("message", message);
@@ -67,6 +72,10 @@ public class ClientController {
     public ModelAndView editClientPage(@PathVariable Integer id) {
         ModelAndView mav = new ModelAndView("client-edit");
         Client client = clientService.findById(id);
+
+        String action = "Edit client with ID:";
+        historyService.createClient(client.getId(), client.getId(), action);
+
         mav.addObject("client", client);
         return mav;
     }
@@ -114,7 +123,7 @@ public class ClientController {
             return new ModelAndView("client-detail");
 
         ModelAndView mav = new ModelAndView("redirect:/index.html");
-        String message = "Client was successfully updated.";
+        String message = "Client was successfully found.";
 
         redirectAttributes.addFlashAttribute("message", message);
         return mav;

@@ -1,31 +1,52 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-    <title>History List page</title>
-</head>
+<%@ page session="false"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<jsp:include page="/WEB-INF/jsp/header.jsp" />
+
 <body>
-<h1>History List page</h1>
-<table style="text-align: center;" border="1px" cellpadding="0" cellspacing="0" >
-    <thead>
-    <tr>
-        <th width="150px">HistoryID</th><th width="150px">UserID</th><th width="150px">Action</th><th width="150px">Date of action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="history" items="${historyList}">
+
+<div class="container">
+
+    <c:if test="${not empty msg}">
+        <div class="alert alert-${css} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>${msg}</strong>
+        </div>
+    </c:if>
+
+    <h1>All History</h1>
+
+    <table class="table table-striped">
+        <thead>
         <tr>
-            <td>${history.id}</td>
-            <td>${history.userID}</td>
-            <td>${history.action}</td>
-            <td>${history.actionData}</td>
+            <th>ID</th>
+            <th>UserID</th>
+            <th>Action</th>
+            <th>Action Data</th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
-<a href="${pageContext.request.contextPath}/">Home page</a>
+        </thead>
+        <c:forEach var="history" items="${historyList}">
+            <tr>
+                <td>${history.id}</td>
+                <td>${history.userID}</td>
+                <td>${history.action}</td>
+                <td>${history.actionData}</td>
+
+                <spring:url value="/history/${history.id}" var="historyUrl" />
+                <td><button class="btn btn-success" onclick="location.href='${historyUrl}'">Info</button><tr>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
+
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />
 </body>
 </html>
