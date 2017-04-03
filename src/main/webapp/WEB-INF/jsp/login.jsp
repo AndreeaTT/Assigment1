@@ -1,26 +1,46 @@
+<%@ page session="false"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<jsp:include page="/WEB-INF/jsp/header.jsp" />
+<link href="/resources/css/login.css" rel="stylesheet">
+
 <body>
-<h3>JournalDEV Tutorials</h3>
+<script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
+<!-- This is a very simple parallax effect achieved by simple CSS 3 multiple backgrounds, made by http://twitter.com/msurguy -->
 
-<c:if test="${not empty error}"><div>${error}</div></c:if>
-<c:if test="${not empty message}"><div>${message}</div></c:if>
+<div class="container">
+    <spring:url value="/login" var="accountActionUrl" />
 
-<form name='login' action="<c:url value='/login' />" method='POST'>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    <table>
-        <tr>
-            <td>UserName:</td>
-            <td><input type='text' name='username' value=''></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type='password' name='password' /></td>
-        </tr>
-        <tr>
-            <td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-        </tr>
-    </table>
-</form>
+    <form:form class="form-horizontal" method="POST" commandName="login" action="${accountActionUrl}">
+    <div class="row vertical-offset-100">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Please sign in</h3>
+                </div>
+                <div class="panel-body">
+                    <form accept-charset="UTF-8" role="form">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="E-mail" name="username" type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                            </div>
+                            <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form:form>
+</div>
+
 </body>
 </html>

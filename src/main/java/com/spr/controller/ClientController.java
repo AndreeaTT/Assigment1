@@ -63,7 +63,7 @@ public class ClientController {
         String action = "Create new client with ID:";
         historyService.createClient(client.getId(), client.getId(), action);
 
-        mav.setViewName("redirect:/index.html");
+        mav.setViewName("redirect:/client-detail.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
@@ -89,7 +89,7 @@ public class ClientController {
         if (result.hasErrors())
             return new ModelAndView("client-edit");
 
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
+        ModelAndView mav = new ModelAndView("redirect:/client-detail.html");
         String message = "Client was successfully updated.";
         clientService.update(client);
 
@@ -122,7 +122,7 @@ public class ClientController {
         if (result.hasErrors())
             return new ModelAndView("client-detail");
 
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
+        ModelAndView mav = new ModelAndView("redirect:/client-detail.html");
         String message = "Client was successfully found.";
 
         redirectAttributes.addFlashAttribute("message", message);

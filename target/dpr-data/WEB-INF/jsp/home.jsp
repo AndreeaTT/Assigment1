@@ -11,59 +11,55 @@
 
     <title>Bank Manager</title>
 
-
-    <spring:url value="/resources/css/hello.css" var="coreCss" />
-    <spring:url value="/resources/css/bootstrap.min.css" var="bootstrapCss" />
-    <link href="${bootstrapCss}" rel="stylesheet" />
-    <link href="${coreCss}" rel="stylesheet" />
-
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!-- Bootstrap Core CSS -->
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
 
 
 </head>
 
 <body>
-<spring:url value="/" var="urlHome" />
+
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
 
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Home</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="${urlHome}">User</a>
-                    <ul class="dropdown-content">
-                        <li><a href="${pageContext.request.contextPath}/user/create.html">Add</a></li>
-                        <li><a href="${pageContext.request.contextPath}/user/list.html">List</a></li>
-                    </ul>
-            </div>
-            </ul>
             <ul class="nav navbar-nav">
-                <li class="dropdown active">
-                    <a href="/">Client</a>
-                    <ul class="dropdown-content">
-                        <li><a href="${pageContext.request.contextPath}/client/create.html">Add</a></li>
-                        <li><a href="${pageContext.request.contextPath}/client/list.html">List</a></li>
-                    </ul>
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/user/list.html">Employee</a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/account/list.html">Account</a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/client/list.html">Client</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav">
-                <li class="dropdown active">
-                    <a href="/">Account</a>
-                    <ul class="dropdown-content">
-                        <li><a href="${pageContext.request.contextPath}/account/create.html">Add</a></li>
-                        <li><a href="${pageContext.request.contextPath}/account/list.html">List</a></li>
-                    </ul>
-                </li>
-            </ul>
-                <ul class="nav navbar-nav">
-                    <li class="dropdown active">
-                        <a href="/history/list/history">History</a>
-                    </li>
-                </ul>
         </div>
     </div>
 </nav>
+
+<c:if test="${not empty message}">
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>${message}</strong>
+    </div>
+</c:if>
 
 <script src="/resources/js/jquery.js"></script>
 

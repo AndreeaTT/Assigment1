@@ -9,13 +9,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
+import com.spr.model.User;
 
 /**
  * Created by Andreea ADM on 4/1/2017.
  */
 
 @Service
-public class SecurityServiceImplementation implements  SecurityService{
+public class SecurityServiceImpl implements  SecurityService{
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -23,9 +25,10 @@ public class SecurityServiceImplementation implements  SecurityService{
     @Autowired
     private UserDetailsService userDetailsService;
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImplementation.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
     @Override
+    @Transactional
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         if (userDetails instanceof UserDetails) {
@@ -35,6 +38,7 @@ public class SecurityServiceImplementation implements  SecurityService{
     }
 
     @Override
+    @Transactional
     public void login(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
@@ -43,7 +47,7 @@ public class SecurityServiceImplementation implements  SecurityService{
 
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            logger.debug(String.format("Auto login %s successfully!", username));
+            logger.debug(String.format("Login %s successfully!", username));
         }
     }
 }

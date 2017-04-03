@@ -1,8 +1,10 @@
 package com.spr.service;
 
+import java.util.Map;
 import com.spr.exception.UserNotFound;
 import com.spr.model.User;
 import java.util.List;
+import java.sql.SQLException;
 
 /**
  * Created by Andreea ADM on 3/27/2017.

@@ -1,7 +1,9 @@
 package com.spr.service;
 
+import com.spr.model.User;
+
 public interface SecurityService {
 
-    String findLoggedInUsername();
-    void login(String username, String password);
+     public String findLoggedInUsername();
+     public void login(String username, String password);
 }

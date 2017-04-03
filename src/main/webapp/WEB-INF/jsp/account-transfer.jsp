@@ -1,39 +1,53 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-    <title>Transfer money page</title>
-</head>
+<%@ page session="false"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<jsp:include page="/WEB-INF/jsp/header.jsp" />
+
 <body>
-<h1>Transfer money</h1>
-<form:form method="POST" commandName="transfer" action="${pageContext.request.contextPath}/transfer/money.html" >
-    <table>
-        <tbody>
+
+<div class="container">
+
+    <h1>Transfer money</h1>
+
+
+    <table class="table table-striped">
+        <thead>
         <tr>
-            <td>Id-ul contului ce trimite bani:</td>
-            <td><form:input path="senderID" /></td>
-            <td><form:errors path="senderID" cssStyle="color: red;"/></td>
+            <th>ID</th>
+            <th>ClientID</th>
+            <th>TypeAccount</th>
+            <th>Amount</th>
+            <th>CreateData</th>
+            <th>Action</th>
         </tr>
-        <tr>
-            <td>Id-ul contului care ii primeste:</td>
-            <td><form:input path="receiverID" /></td>
-            <td><form:errors path="receiverID" cssStyle="color: red;"/></td>
-        </tr>
-        <tr>
-            <td>Suma transmisa:</td>
-            <td><form:input path="value" /></td>
-            <td><form:errors path="value" cssStyle="color: red;"/></td>
-        </tr>
-        <td><input type="submit" value="Create" /></td>
-        <td></td>
-        <td></td>
-        </tr>
+        </thead>
+        <c:forEach var="account" items="${accountList}">
+            <tr>
+                <td>${account.id}</td>
+                <td>${account.clientID}</td>
+                <td>${account.typeAccount}</td>
+                <td>${account.amount}</td>
+                <td>${account.createData}</td>
+
+            </tr>
+        </c:forEach>
         </tbody>
+
     </table>
-</form:form>
-<a href="${pageContext.request.contextPath}/">Home page</a>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn-lg btn-primary pull-right" onclick="location.href='${pageContext.request.contextPath}/account/create.html'">Add</button>
+        </div>
+    </div>
+
+</div>
+
+<jsp:include page="/WEB-INF/jsp/footer.jsp" />
 </body>
 </html>

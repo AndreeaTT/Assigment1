@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Andreea ADM on 3/29/2017.
@@ -21,22 +22,6 @@ public class HistoryServiceImplementation implements HistoryService{
 
     @Resource
     private HistoryRepository historyRepository;
-
-    @Override
-    @Transactional
-    public History createUser(Integer userID, String action){
-        History history = new History();
-
-        String description = action + " " + userID.toString();
-        history.setUserID(userID);
-        history.setAction(description);
-
-        Calendar calendar = Calendar.getInstance();
-        java.util.Date currentDate = calendar.getTime();
-        java.sql.Date date = new java.sql.Date(currentDate.getTime());
-        history.setActionData(date);
-        return historyRepository.save(history);
-    }
 
     @Override
     @Transactional
@@ -55,7 +40,8 @@ public class HistoryServiceImplementation implements HistoryService{
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date currentDate = calendar.getTime();
-        java.sql.Date date = new java.sql.Date(currentDate.getTime());
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
+        String date = formatDate.format(currentDate);
         history.setActionData(date);
         return historyRepository.save(history);
     }
@@ -71,9 +57,12 @@ public class HistoryServiceImplementation implements HistoryService{
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date currentDate = calendar.getTime();
-        java.sql.Date date = new java.sql.Date(currentDate.getTime());
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
+        String date = formatDate.format(currentDate);
         history.setActionData(date);
+
         return historyRepository.save(history);
+
     }
 
     @Override
@@ -92,5 +81,14 @@ public class HistoryServiceImplementation implements HistoryService{
     @Transactional
     public History findById(Integer id){
         return historyRepository.findOne(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllEmployeeHistory(Integer id){
+            List<History> historyList = historyRepository.findByUserID(id);
+            for (History history: historyList)
+                historyRepository.delete(history);
+
     }
 }

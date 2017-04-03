@@ -12,12 +12,12 @@
 
 <div class="container">
 
-    <c:if test="${not empty msg}">
-        <div class="alert alert-${css} alert-dismissible" role="alert">
+    <c:if test="${not empty message}">
+        <div class="alert alert-success">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <strong>${msg}</strong>
+            <strong>${message}</strong>
         </div>
     </c:if>
 
@@ -42,6 +42,7 @@
                 <td>${user.rights}</td>
 
                 <spring:url value="/user/${user.id}" var="userUrl" />
+                <spring:url value="/user/create" var="createUrl" />
                 <spring:url value="/user/delete${user.id}" var="deleteUrl" />
                 <spring:url value="/user/edit/${user.id}" var="updateUrl" />
                 <spring:url value="/history/list/${user.id}" var="historyUrl"/>
@@ -55,6 +56,11 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn-lg btn-primary pull-right" onclick="location.href='${pageContext.request.contextPath}/user/create.html'">Add</button>
+        </div>
+    </div>
 
 </div>
 

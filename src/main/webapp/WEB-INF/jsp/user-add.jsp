@@ -45,8 +45,8 @@
                 <label class="col-sm-2 control-label">Role</label>
                 <div class="col-sm-5">
                     <form:select path="rights" class="form-control">
-                        <form:option value="NONE" label="--- Select ---" />
-                        <form:options item ="Employee"/>
+                        <form:option selected="selected" value="user">Employee</form:option>
+                        <form:option value="admin">Admin</form:option>
                     </form:select>
                     <form:errors path="rights" class="control-label" />
                 </div>

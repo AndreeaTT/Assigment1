@@ -59,7 +59,7 @@ public class AccountController {
         String action = "Create new account with ID:";
         historyService.createAccount(account.getId(), account.getId(), account.getClientID(), action);
 
-        mav.setViewName("redirect:/index.html");
+        mav.setViewName("redirect:/account-detail.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
@@ -84,7 +84,7 @@ public class AccountController {
         if (result.hasErrors())
             return new ModelAndView("account-edit");
 
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
+        ModelAndView mav = new ModelAndView("redirect:/account-detail.html");
         String message = "Account was successfully updated.";
         accountService.update(account);
 
@@ -104,7 +104,7 @@ public class AccountController {
     public ModelAndView deleteAccount(@PathVariable Integer id,
                                       final RedirectAttributes redirectAttributes) throws AccountNotFound {
 
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
+        ModelAndView mav = new ModelAndView("redirect:/account-list.html");
 
         Account account = accountService.delete(id);
         String message = "The account with : "+ account.getId() +" was successfully deleted.";
@@ -133,7 +133,7 @@ public class AccountController {
         if (result.hasErrors())
             return new ModelAndView("account-detail");
 
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
+        ModelAndView mav = new ModelAndView("redirect:/account-detail.html");
         String message = "Account was successfully found.";
 
         redirectAttributes.addFlashAttribute("message", message);

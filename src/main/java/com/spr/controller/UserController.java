@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.*;
-import com.spr.model.History;
+import org.springframework.ui.Model;
 
 /**
  * Created by Andreea ADM on 3/26/2017.
@@ -51,15 +51,13 @@ public class UserController {
                                       final RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            return new ModelAndView("user-add", populateDefaultModel());
+            return new ModelAndView("user-add");
         }
 
         String message = "New user was successfully created.";
         userService.create(user);
 
-        String action = "Create new user with ID:";
-        historyService.createUser(user.getId(), action);
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
+        ModelAndView mav = new ModelAndView("redirect:/user/list.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
@@ -69,8 +67,6 @@ public class UserController {
         ModelAndView mav = new ModelAndView("user-edit");
         User user = userService.findById(id);
 
-        String action = "Edit user with ID:";
-        historyService.createUser(user.getId(), action);
         mav.addObject("user", user);
         return mav;
     }
@@ -82,11 +78,10 @@ public class UserController {
                                  final RedirectAttributes redirectAttributes) throws UserNotFound{
 
         if (result.hasErrors())
-            return new ModelAndView("user-edit", populateDefaultModel());
+            return new ModelAndView("user-edit");
 
-        ModelAndView mav = new ModelAndView("redirect:/index.html", populateDefaultModel());
+        ModelAndView mav = new ModelAndView("redirect:/user/d.html");
         String message = "User was successfully updated.";
-
         userService.update(user);
 
         redirectAttributes.addFlashAttribute("message", message);
@@ -107,11 +102,9 @@ public class UserController {
 
         ModelAndView mav = new ModelAndView("redirect:/index.html");
 
+        historyService.deleteAllEmployeeHistory(id);
         User user =userService.delete(id);
         String message = "The user with : "+ user.getId() +" was successfully deleted.";
-
-        String action = "Delete user with ID:";
-        historyService.createUser(user.getId(), action);
 
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
@@ -139,16 +132,5 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
-    }
-
-    private Map<String, Object> populateDefaultModel() {
-        Map<String, Object> model = new HashMap<String, Object>();
-
-        List<String> rights = new ArrayList<String>();
-        rights.add("Employee");
-        rights.add("Admin");
-        model.put("role", rights);
-
-        return model;
     }
 }

@@ -1,5 +1,7 @@
 package com.spr.model;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import javax.persistence.*;
 
 /**

@@ -1,14 +1,11 @@
 package com.spr.service;
 
-import java.util.Set;
-import java.util.HashSet;
 import com.spr.exception.UserNotFound;
 import com.spr.model.User;
 import com.spr.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,14 +14,11 @@ import java.util.List;
  * Created by Andreea ADM on 3/27/2017.
  */
 
-@Service
+@Service("userService")
 public class UserServiceImplementation implements UserService{
 
     @Resource
     private UserRepository userRepository;
-
-//    @Autowired
- //   private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     @Transactional

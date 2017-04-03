@@ -35,7 +35,8 @@
                 <label class="col-sm-2 control-label">Type Account</label>
                 <div class="col-sm-5">
                     <form:select path="typeAccount" class="form-control" id="typeAccount" placeholder="Type">
-                        <form:option value="NONE" label="--- Select ---" />
+                        <form:option selected="selected" value="Saving">Saving Account</form:option>
+                        <form:option value="Spending">Spending Account</form:option>
                     </form:select>
                     <form:errors path="typeAccount" class="control-label" />
                 </div>

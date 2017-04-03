@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -27,7 +28,9 @@ public class AccountServiceImplementation implements AccountService {
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date currentDate = calendar.getTime();
-        java.sql.Date date = new java.sql.Date(currentDate.getTime());
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
+        String date = formatDate.format(currentDate);
+        account.setCreateData(date);
         return accountRepository.save(createdAccount);
     }
 

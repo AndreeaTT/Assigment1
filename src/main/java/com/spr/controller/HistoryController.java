@@ -38,8 +38,7 @@ public class HistoryController{
     @RequestMapping(value="/list/{id}", method=RequestMethod.POST)
     public ModelAndView historyPage(@ModelAttribute @Valid History history,
                                    BindingResult result,
-                                   @PathVariable Integer id,
-                                   final RedirectAttributes redirectAttributes) throws HistoryNotFound {
+                                   @PathVariable Integer id) throws HistoryNotFound {
 
         if (result.hasErrors())
             return new ModelAndView("home");

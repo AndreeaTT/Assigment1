@@ -1,14 +1,16 @@
 package com.spr.init;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import javax.sql.DataSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.context.annotation.Bean;
-
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * Spring Web MVC Security Java Config Demo Project
@@ -19,8 +21,41 @@ import org.springframework.context.annotation.Bean;
  */
 @Configuration
 @EnableWebSecurity
+@Import(WebAppConfig.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    private UserDetailsService userDetailsServiceImpl;
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+
+        auth.jdbcAuthentication().dataSource(dataSource);
+}
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.userDetailsService(userDetailsServiceImpl)
+                .authorizeRequests()
+                .antMatchers("/resources/**", "/home").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login.html")
+                .defaultSuccessUrl("/user-list.html")
+                .failureUrl("/user-add.html")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/index.html");
+
+        http.csrf().disable();
+    }
 
     @Bean
     @Override
@@ -28,25 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("admin").password("nimda").roles("ADMIN");
-    }
-
+    @Bean
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests()
-                .antMatchers("/").access("hasRole('ROLE_USER')")
-                .and()
-                .formLogin().loginPage("/login")
-                .defaultSuccessUrl("/home")
-                .failureUrl("/login?footer")
-                .usernameParameter("username").passwordParameter("password")
-                .and()
-                .logout().logoutSuccessUrl("/login?home");
-
+    protected UserDetailsService userDetailsService(){
+        return super.userDetailsService();
     }
+
 }

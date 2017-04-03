@@ -23,7 +23,7 @@ public class History {
     private String action;
 
     @Column(name = "actionData")
-    private Date actionData;
+    private String actionData;
 
     public Integer getId() {
         return id;
@@ -37,7 +37,7 @@ public class History {
         return action;
     }
 
-    public Date getActionData() {
+    public String getActionData() {
         return actionData;
     }
 
@@ -53,7 +53,7 @@ public class History {
         this.action = action;
     }
 
-    public void setActionData(Date actionDate) {
+    public void setActionData(String actionData) {
         this.actionData = actionData;
     }
 }

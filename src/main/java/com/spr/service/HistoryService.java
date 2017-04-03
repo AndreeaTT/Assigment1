@@ -10,10 +10,10 @@ import java.util.List;
  */
 public interface HistoryService {
 
-    public History createUser(Integer userID, String action);
     public List<History> findHistory();
     public List<History> findByUser(Integer id);
     public History findById(Integer id);
     public History createAccount(Integer userID, Integer accountID, Integer clientID, String action);
     public History createClient(Integer userID, Integer clientID, String action);
+    public void deleteAllEmployeeHistory(Integer id);
 }

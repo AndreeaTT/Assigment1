@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 @ComponentScan("com.spr")
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("com.spr.repository")
+@Order(1)
 public class WebAppConfig extends WebMvcConfigurerAdapter{
 
     private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
@@ -41,7 +43,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
     @Resource
     private Environment env;
 
-    @Bean
+    @Bean(name = "dataSource")
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
@@ -73,19 +75,19 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
     }
 
     @Bean
-    public JpaTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return transactionManager;
-    }
-
-    @Bean
     public UrlBasedViewResolver setupViewResolver() {
         UrlBasedViewResolver resolver = new UrlBasedViewResolver();
         resolver.setPrefix("/WEB-INF/jsp/");
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
         return resolver;
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return transactionManager;
     }
 
     @Bean

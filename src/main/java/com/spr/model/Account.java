@@ -25,7 +25,7 @@ public class Account {
     private Double amount;
 
     @Column(name = "createData")
-    private Date createData;
+    private String createData;
 
     public Integer getId() {
         return id;
@@ -39,7 +39,7 @@ public class Account {
         return amount;
     }
 
-    public Date getCreateData() {
+    public String getCreateData() {
         return createData;
     }
 
@@ -55,7 +55,7 @@ public class Account {
         this.amount = amount;
     }
 
-    public void setCreateData(Date createData) {
+    public void setCreateData(String createData) {
         this.createData = createData;
     }
 
