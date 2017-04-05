@@ -14,6 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Andreea ADM on 3/26/2017.
@@ -21,7 +25,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value="/account")
-public class AccountController {
+public class AccountController{
 
     @Autowired
     private AccountService accountService;
@@ -39,6 +43,10 @@ public class AccountController {
 
     @RequestMapping(value="/create", method= RequestMethod.GET)
     public ModelAndView newAccountPage() {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
         ModelAndView mav = new ModelAndView("account-add", "account", new Account());
         return mav;
@@ -48,29 +56,34 @@ public class AccountController {
     public ModelAndView createNewAccount(@ModelAttribute @Valid Account account,
                                         BindingResult result,
                                         final RedirectAttributes redirectAttributes) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors())
             return new ModelAndView("account-add");
 
-        ModelAndView mav = new ModelAndView();
         String message = "New account was successfully created.";
         accountService.create(account);
 
-        String action = "Create new account with ID:";
-        historyService.createAccount(account.getId(), account.getId(), account.getClientID(), action);
+        String action = "Create new account with IBAN:";
+        historyService.createAccount(LoginController.loggedUser, account.getIban(), account.getClientID(), action);
 
-        mav.setViewName("redirect:/account-detail.html");
+        ModelAndView mav = new ModelAndView("redirect:/account/list.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
 
     @RequestMapping(value="/edit/{id}", method=RequestMethod.GET)
     public ModelAndView editAccountPage(@PathVariable Integer id) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("account-edit");
         Account account = accountService.findById(id);
-
-        String action = "Edit account with ID:";
-        historyService.createAccount(account.getId(), account.getId(), account.getClientID(), action);
         mav.addObject("account", account);
         return mav;
     }
@@ -80,20 +93,31 @@ public class AccountController {
                                    BindingResult result,
                                    @PathVariable Integer id,
                                    final RedirectAttributes redirectAttributes) throws AccountNotFound {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors())
             return new ModelAndView("account-edit");
 
-        ModelAndView mav = new ModelAndView("redirect:/account-detail.html");
+        ModelAndView mav = new ModelAndView("redirect:/account/list.html");
         String message = "Account was successfully updated.";
         accountService.update(account);
 
+        String action = "Edit account with IBAN:";
+        historyService.createAccount(LoginController.loggedUser, account.getIban(), account.getClientID(), action);
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
 
     @RequestMapping(value="/list", method=RequestMethod.GET)
     public ModelAndView clientListPage() {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("account-list");
         List<Account> accountList = accountService.findAccounts();
         mav.addObject("accountList", accountList);
@@ -104,13 +128,18 @@ public class AccountController {
     public ModelAndView deleteAccount(@PathVariable Integer id,
                                       final RedirectAttributes redirectAttributes) throws AccountNotFound {
 
-        ModelAndView mav = new ModelAndView("redirect:/account-list.html");
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
+        ModelAndView mav = new ModelAndView("redirect:/account/list.html");
 
         Account account = accountService.delete(id);
-        String message = "The account with : "+ account.getId() +" was successfully deleted.";
+        String message = "The account with IBAN: "+ account.getIban() +" was successfully deleted.";
 
-        String action = "Delete account with ID:";
-        historyService.createAccount(account.getId(), account.getId(), account.getClientID(), action);
+        String action = "Delete account with IBAN:";
+        historyService.createAccount(LoginController.loggedUser, account.getIban(), account.getClientID(), action);
 
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
@@ -118,6 +147,11 @@ public class AccountController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public ModelAndView showAccountPage(@PathVariable Integer id) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("account-detail");
         Account account = accountService.findById(id);
         mav.addObject("account", account);
@@ -129,14 +163,15 @@ public class AccountController {
                                  BindingResult result,
                                  @PathVariable Integer id,
                                  final RedirectAttributes redirectAttributes) throws AccountNotFound{
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors())
-            return new ModelAndView("account-detail");
+            return new ModelAndView("home");
 
-        ModelAndView mav = new ModelAndView("redirect:/account-detail.html");
-        String message = "Account was successfully found.";
-
-        redirectAttributes.addFlashAttribute("message", message);
+        ModelAndView mav = new ModelAndView("account-detail");
         return mav;
     }
 }

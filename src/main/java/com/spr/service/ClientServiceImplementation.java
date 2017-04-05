@@ -56,7 +56,13 @@ public class ClientServiceImplementation implements ClientService {
 
     @Override
     @Transactional
-    public List<Account> findClientAccounts(Integer id){
+    public Client findClientByNumericCode(String numericCode){
+        return clientRepository.findByNumericCode(numericCode);
+    }
+
+    @Override
+    @Transactional
+    public List<Account> findAccountsByClientId(Integer id){
         return accountRepository.findByClientID(id);
     }
 }

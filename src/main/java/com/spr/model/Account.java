@@ -1,5 +1,7 @@
 package com.spr.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -15,6 +17,9 @@ public class Account {
     @GeneratedValue
     private Integer id;
 
+    @Column(name = "iban", unique = true, nullable = false)
+    private String iban;
+
     @Column(name = "clientID")
     private Integer clientID;
 
@@ -29,6 +34,14 @@ public class Account {
 
     public Integer getId() {
         return id;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
     public String getTypeAccount() {

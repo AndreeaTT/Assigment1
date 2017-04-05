@@ -33,28 +33,29 @@ public class TransferValidator implements Validator{
         ValidationUtils.rejectIfEmpty(errors, "value", "transfer.value.empty");
 
         if (transfer.getSenderID() != null)
-        if (accountService.findById(transfer.getSenderID()) == null)
+        if (accountService.findByIban(transfer.getSenderID()) == null)
             errors.rejectValue("senderID", "transfer.sender.invalid");
 
         if (transfer.getReceiverID() != null)
-        if (accountService.findById(transfer.getReceiverID()) == null)
+        if (accountService.findByIban(transfer.getReceiverID()) == null)
             errors.rejectValue("receiverID", "transfer.receiver.invalid");
 
+        if (transfer.getSenderID() != null && transfer.getReceiverID() != null)
+            if (transfer.getReceiverID() == transfer.getSenderID()){
+            errors.rejectValue("senderID", "transfer.same.account");
+            errors.rejectValue("receiverID", "transfer.same.account");
+        }
+
         if (transfer.getValue() != null)
-        if (transfer.getValue() < 0.0)
-            errors.rejectValue("value", "transfer.value.negative");
+             if (transfer.getValue() < 0.0)
+                 errors.rejectValue("value", "transfer.value.negative");
 
         if (transfer.getValue() != null && transfer.getSenderID() != null)
-        if (transfer.getValue() > accountService.findById(transfer.getSenderID()).getAmount())
-            errors.rejectValue("value","transfer.value.toomuch");
-
-        if (!(transfer.getSenderID() instanceof Integer))
-            errors.rejectValue("clientID", "transfer.sender.integer");
+            if (accountService.findByIban(transfer.getSenderID()) != null)
+                if (transfer.getValue() > accountService.findByIban(transfer.getSenderID()).getAmount())
+                    errors.rejectValue("value","transfer.value.toomuch");
 
         if (!(transfer.getValue() instanceof Double))
-            errors.rejectValue("clientID", "transfer.balance.double");
-
-        if (!(transfer.getReceiverID() instanceof Integer))
-            errors.rejectValue("clientID", "transfer.receiver.integer");
+            errors.rejectValue("value", "transfer.balance.double");
     }
 }

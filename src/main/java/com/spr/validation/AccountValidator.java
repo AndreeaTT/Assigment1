@@ -30,6 +30,7 @@ public class AccountValidator implements Validator {
 
         ValidationUtils.rejectIfEmpty(errors, "clientID", "account.client.empty");
         ValidationUtils.rejectIfEmpty(errors, "amount", "account.amount.empty");
+        ValidationUtils.rejectIfEmpty(errors, "iban", "account.iban.empty");
 
         if (account.getAmount() != null)
         if (Double.compare(account.getAmount() , new Double(0.0) )< 0)
@@ -45,7 +46,15 @@ public class AccountValidator implements Validator {
         if (!(account.getAmount() instanceof Double))
             errors.rejectValue("clientID", "account.amount.double");
 
-       // if (account.getTypeAccount().equalsIgnoreCase("NONE"))
-        //    errors.rejectValue("typeAccount", "account.typeAccount.empty");
+        if (account.getIban() != null)
+            if (!(account.getIban().matches("RO[0-9]+")))
+                errors.rejectValue("iban", "account.iban.invalid");
+
+        if (account.getIban() != null)
+            if (account.getIban().length() != 24)
+                errors.rejectValue("iban", "account.iban.length");
+
+        if (account.getTypeAccount().equals("None"))
+            errors.rejectValue("typeAccount", "account.type.select");
     }
 }

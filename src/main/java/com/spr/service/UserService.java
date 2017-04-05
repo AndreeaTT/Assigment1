@@ -17,4 +17,5 @@ public interface UserService {
     public User findById(Integer id);
     public List<User> findAllUsers();
     public User findByUsername(String username);
+    public List<User> findByRight(String role);
 }

@@ -5,4 +5,5 @@ import com.spr.model.Client;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 
+        public Client findByNumericCode(String numericCode);
 }

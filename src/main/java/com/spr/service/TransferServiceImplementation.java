@@ -46,12 +46,11 @@ public class TransferServiceImplementation implements TransferService{
     @Override
     @Transactional
     public void transferMoney(Transfer transfer){
-        Account accountSender = accountRepository.findOne(transfer.getSenderID());
-        Account accountReceiver = accountRepository.findOne(transfer.getReceiverID());
+        Account accountSender = accountRepository.findByIban(transfer.getSenderID());
+        Account accountReceiver = accountRepository.findByIban(transfer.getReceiverID());
         Double balanceValue = transfer.getValue();
 
         accountSender.setAmount(accountSender.getAmount() - balanceValue);
         accountReceiver.setAmount(accountReceiver.getAmount() + balanceValue);
     }
-
 }

@@ -13,9 +13,7 @@
 
     <h1>Edit Client</h1>
 
-    <spring:url value="/client/edit" var="clientActionUrl" />
-
-    <form:form class="form-horizontal" method="POST" commandName="client" action="${clientActionUrl}">
+    <form:form class="form-horizontal" method="POST" commandName="client" action="${pageContext.request.contextPath}/client/edit/${client.id}.html">
 
         <form:hidden path="id" />
 
@@ -33,8 +31,8 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <label class="col-sm-2 control-label">Card Number</label>
                 <div class="col-sm-10">
-                    <form:input path="name" type="text" class="form-control " id="cardNumber" placeholder="Card Number" />
-                    <form:errors path="name" class="control-label" />
+                    <form:input path="cardNumber" type="text" class="form-control " id="cardNumber" placeholder="Card Number" />
+                    <form:errors path="cardNumber" class="control-label" />
                 </div>
             </div>
         </spring:bind>
@@ -61,7 +59,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn-lg btn-primary pull-right">Edit</button>
+                <button type="submit" class="btn-lg btn-primary pull-right"  onclick="location.href='${pageContext.request.contextPath}/client/edit/${client.id}.html'">Edit</button>
             </div>
         </div>
 

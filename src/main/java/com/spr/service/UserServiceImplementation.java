@@ -24,16 +24,17 @@ public class UserServiceImplementation implements UserService{
     @Transactional
     public User create(User user) {
         User createdUser = user;
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(createdUser);
     }
 
     @Override
     @Transactional(rollbackFor=UserNotFound.class)
     public User update(User user) throws UserNotFound {
-        User updatedUser = userRepository.findOne(user.getId());
+        User updatedUser= userRepository.findOne(user.getId());
+
         if (updatedUser == null)
             throw new UserNotFound();
+
         updatedUser.setUsername(user.getUsername());
         updatedUser.setPassword(user.getPassword());
         updatedUser.setRights(user.getRights());
@@ -66,5 +67,11 @@ public class UserServiceImplementation implements UserService{
     @Transactional
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public List<User> findByRight(String role){
+       return userRepository.findByRights(role);
     }
 }

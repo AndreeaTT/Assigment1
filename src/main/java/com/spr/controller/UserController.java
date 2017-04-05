@@ -40,6 +40,10 @@ public class UserController {
 
     @RequestMapping(value="/create", method= RequestMethod.GET)
     public ModelAndView newUserPage() {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Employee"))
+            return new ModelAndView("redirect:/index.html");
 
         ModelAndView mav = new ModelAndView("user-add", "user", new User());
         return mav;
@@ -49,6 +53,10 @@ public class UserController {
     public ModelAndView createNewUser(@ModelAttribute @Valid User user,
                                       BindingResult result,
                                       final RedirectAttributes redirectAttributes) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Employee"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors()) {
             return new ModelAndView("user-add");
@@ -56,7 +64,6 @@ public class UserController {
 
         String message = "New user was successfully created.";
         userService.create(user);
-
         ModelAndView mav = new ModelAndView("redirect:/user/list.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
@@ -64,6 +71,11 @@ public class UserController {
 
     @RequestMapping(value="/edit/{id}", method=RequestMethod.GET)
     public ModelAndView editUserPage(@PathVariable Integer id) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Employee"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("user-edit");
         User user = userService.findById(id);
 
@@ -76,22 +88,31 @@ public class UserController {
                                  BindingResult result,
                                  @PathVariable Integer id,
                                  final RedirectAttributes redirectAttributes) throws UserNotFound{
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Employee"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors())
             return new ModelAndView("user-edit");
 
-        ModelAndView mav = new ModelAndView("redirect:/user/d.html");
         String message = "User was successfully updated.";
         userService.update(user);
 
+        ModelAndView mav = new ModelAndView("redirect:/user/list.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
 
     @RequestMapping(value="/list", method=RequestMethod.GET)
     public ModelAndView userListPage() {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Employee"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("user-list");
-        List<User> userList = userService.findAllUsers();
+        List<User> userList = userService.findByRight("Employee");
         mav.addObject("userList", userList);
         return mav;
     }
@@ -99,9 +120,12 @@ public class UserController {
     @RequestMapping(value="/delete/{id}", method=RequestMethod.GET)
     public ModelAndView deleteUser(@PathVariable Integer id,
                                    final RedirectAttributes redirectAttributes) throws UserNotFound {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Employee"))
+            return new ModelAndView("redirect:/index.html");
 
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
-
+        ModelAndView mav = new ModelAndView("redirect:/user/list.html");
         historyService.deleteAllEmployeeHistory(id);
         User user =userService.delete(id);
         String message = "The user with : "+ user.getId() +" was successfully deleted.";
@@ -112,25 +136,26 @@ public class UserController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public ModelAndView showUserPage(@PathVariable Integer id) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Employee"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("user-detail");
         User user = userService.findById(id);
         mav.addObject("user", user);
         return mav;
     }
 
-    @RequestMapping(value="/{id}", method=RequestMethod.POST)
-    public ModelAndView showUser(@ModelAttribute @Valid User user,
-                                 BindingResult result,
-                                 @PathVariable Integer id,
-                                 final RedirectAttributes redirectAttributes) throws UserNotFound{
+    @RequestMapping(value="/detail")
+    public ModelAndView showUserDetail() {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
 
-        if (result.hasErrors())
-            return new ModelAndView("user-detail");
-
-        ModelAndView mav = new ModelAndView("redirect:/index.html");
-        String message = "User was successfully found.";
-
-        redirectAttributes.addFlashAttribute("message", message);
+        User user = userService.findByUsername(LoginController.loggedUser);
+        ModelAndView mav = new ModelAndView("redirect:/user/"+user.getId()+".html");
+        mav.addObject("user", user);
         return mav;
     }
 }
+

@@ -28,6 +28,7 @@
         <thead>
         <tr>
             <th>ID</th>
+            <th>IBAN</th>
             <th>ClientID</th>
             <th>TypeAccount</th>
             <th>Amount</th>
@@ -38,6 +39,7 @@
     <c:forEach var="account" items="${accountList}">
         <tr>
             <td>${account.id}</td>
+            <td>${account.iban}</td>
             <td>${account.clientID}</td>
             <td>${account.typeAccount}</td>
             <td>${account.amount}</td>

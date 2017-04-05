@@ -40,21 +40,11 @@ public class AccountServiceImplementation implements AccountService {
         Account updatedAccount = accountRepository.findOne(account.getId());
         if (updatedAccount == null)
             throw new AccountNotFound();
+        updatedAccount.setClientID(account.getClientID());
         updatedAccount.setAmount(account.getAmount());
         updatedAccount.setTypeAccount(account.getTypeAccount());
         return updatedAccount;
     }
-
-    @Override
-    @Transactional(rollbackFor=AccountNotFound.class)
-    public Account updateAmount(Integer id, Double value) throws AccountNotFound{
-        Account updatedAccount = accountRepository.findOne(id);
-        if (updatedAccount == null)
-            throw new AccountNotFound();
-        updatedAccount.setAmount(updatedAccount.getAmount() - value);
-        return updatedAccount;
-    }
-
 
     @Override
     @Transactional(rollbackFor=AccountNotFound.class)
@@ -74,7 +64,20 @@ public class AccountServiceImplementation implements AccountService {
 
     @Override
     @Transactional
+    public Account findByIban(String iban) {
+        return accountRepository.findByIban(iban);
+    }
+
+    @Override
+    @Transactional
     public List<Account> findAccounts() {
         return accountRepository.findAll();
     }
+
+    @Override
+    @Transactional
+    public List<Account> findByBalanceValue(Integer id, Double balance){
+        return accountRepository.findByClientIDAndAmountGreaterThan(id, balance);
+    }
+
 }

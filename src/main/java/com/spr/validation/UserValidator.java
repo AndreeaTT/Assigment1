@@ -15,7 +15,7 @@ import javax.validation.Validation;
  */
 
 @Component
-public class UserValidator implements Validator {
+public class UserValidator implements Validator{
 
     @Autowired
     private UserService userService;
@@ -29,15 +29,17 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         User user = (User) target;
+
         ValidationUtils.rejectIfEmpty(errors, "username", "user.username.empty");
         ValidationUtils.rejectIfEmpty(errors, "password", "user.password.empty");
-        ValidationUtils.rejectIfEmpty(errors, "rights", "user.rights.empty");
 
-        if (user.getUsername().length() < 8 || user.getUsername().length() > 35)
-            errors.rejectValue("username","user.username.length");
+        if (user.getUsername() != null)
+            if (user.getUsername().length() < 8 || user.getUsername().length() > 35)
+                errors.rejectValue("username","user.username.length");
 
-        if (user.getPassword().length() < 8 || user.getPassword().length() > 35)
-            errors.rejectValue("password","user.password.length");
+        if (user.getUsername() != null)
+            if (user.getPassword().length() < 8 || user.getPassword().length() > 35)
+                errors.rejectValue("password","user.password.length");
 
         if (user.getUsername() != null)
             if (!(user.getUsername().matches("[a-zA-Z](.)*")))
@@ -47,7 +49,8 @@ public class UserValidator implements Validator {
             if (!(user.getPassword().matches("[a-zA-Z](.)*")))
                 errors.rejectValue("password", "user.password.invalid");
 
-        if (user.getRights().equalsIgnoreCase("NONE"))
-            errors.rejectValue("rights", "user.rights.invalid");
+        if (user != null)
+        if (user.getRights().equals("None"))
+            errors.rejectValue("rights", "user.role.select");
     }
 }

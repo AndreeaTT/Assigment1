@@ -45,9 +45,11 @@
             <spring:url value="/client/${client.id}" var="clientUrl" />
             <spring:url value="/client/create" var="addUrl" />
             <spring:url value="/client/edit/${client.id}" var="updateUrl" />
+            <spring:url value="/client/accounts/${client.id}" var="actionUrl" />
 
             <td><button class="btn btn-success" onclick="location.href='${clientUrl}'">Info</button>
-            <button class="btn btn-warning" onclick="location.href='${updateUrl}'">Update</button></td>
+            <button class="btn btn-danger" onclick="location.href='${updateUrl}'">Update</button>
+            <button class="btn btn-warning" onclick="location.href='${actionUrl}'">Accounts</button></td>
         </tr>
     </c:forEach>
 </table>

@@ -6,18 +6,18 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<jsp:include page="/WEB-INF/jsp/header.jsp" />
+<jsp:include page="/WEB-INF/jsp/header-admin.jsp" />
 
 <body>
 
 <div class="container">
 
-    <c:if test="${not empty msg}">
+    <c:if test="${not empty message}">
         <div class="alert alert-${css} alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <strong>${msg}</strong>
+            <strong>${message}</strong>
         </div>
     </c:if>
 
@@ -45,6 +45,13 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn-lg btn-primary pull-right" onclick="location.href='${pageContext.request.contextPath}/history/history.html'">Reports</button>
+        </div>
+    </div>
+
 </div>
 
 <jsp:include page="/WEB-INF/jsp/footer.jsp" />

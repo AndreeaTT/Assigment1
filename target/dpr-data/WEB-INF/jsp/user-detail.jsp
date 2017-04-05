@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<jsp:include page="/WEB-INF/jsp/header.jsp" />
+<jsp:include page="/WEB-INF/jsp/header-admin.jsp" />
 
 <div class="container">
 

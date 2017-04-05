@@ -13,11 +13,19 @@
 
     <h1>Edit Account</h1>
 
-    <spring:url value="/account/edit" var="accountActionUrl" />
-
-    <form:form class="form-horizontal" method="POST" commandName="account" action="${accountActionUrl}">
+    <form:form class="form-horizontal" method="POST" commandName="account" action="${pageContext.request.contextPath}/account/edit/${account.id}.html">
 
         <form:hidden path="id" />
+
+        <spring:bind path="iban">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <label class="col-sm-2 control-label">ID Client</label>
+                <div class="col-sm-10">
+                    <form:input path="iban" type="text" class="form-control " id="iban" placeholder="IBAN" />
+                    <form:errors path="iban" class="control-label" />
+                </div>
+            </div>
+        </spring:bind>
 
         <spring:bind path="clientID">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -34,7 +42,8 @@
                 <label class="col-sm-2 control-label">Type Account</label>
                 <div class="col-sm-5">
                     <form:select path="typeAccount" class="form-control">
-                        <form:option selected="selected" value="Saving">Saving Account</form:option>
+                        <form:option selected="selected" value="None">SELECT TYPE</form:option>
+                        <form:option value="Saving">Saving Account</form:option>
                         <form:option value="Spending">Spending Account</form:option>
                     </form:select>
                     <form:errors path="typeAccount" class="control-label" />
@@ -55,7 +64,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn-lg btn-primary pull-right">Edit</button>
+                <button type="submit" class="btn-lg btn-primary pull-right" onclick="location.href='${pageContext.request.contextPath}/account/edit/${account.id}.html'">Edit</button>
             </div>
         </div>
 

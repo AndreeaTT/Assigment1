@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<jsp:include page="/WEB-INF/jsp/header.jsp" />
+<jsp:include page="/WEB-INF/jsp/header-admin.jsp" />
 
 <body>
 
@@ -63,7 +63,6 @@
     </div>
 
 </div>
-
 <jsp:include page="/WEB-INF/jsp/footer.jsp" />
 </body>
 </html>

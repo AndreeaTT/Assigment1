@@ -10,4 +10,6 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     List<Account> findByClientID(Integer clientID);
+    Account findByIban(String iban);
+    List<Account> findByClientIDAndAmountGreaterThan(Integer clientID, Double amount);
 }

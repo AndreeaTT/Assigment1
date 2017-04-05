@@ -11,8 +11,9 @@ public interface AccountService {
 
     public Account create(Account account);
     public Account update(Account account) throws AccountNotFound;
-    public Account updateAmount(Integer id, Double value) throws AccountNotFound;
     public Account delete(Integer id)throws AccountNotFound;
     public Account findById(Integer id);
+    public Account findByIban(String iban);
     public List<Account> findAccounts();
+    public List<Account> findByBalanceValue(Integer id, Double balance);
 }

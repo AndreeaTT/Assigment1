@@ -15,10 +15,10 @@ public class Transfer {
     private Integer id;
 
     @Column(name = "senderID")
-    private Integer senderID;
+    private String senderID;
 
     @Column(name = "receiverID")
-    private Integer receiverID;
+    private String receiverID;
 
     @Column(name = "value")
     private Double value;
@@ -31,11 +31,11 @@ public class Transfer {
         this.id = id;
     }
 
-    public Integer getSenderID() {
+    public String getSenderID() {
         return senderID;
     }
 
-    public Integer getReceiverID() {
+    public String getReceiverID() {
         return receiverID;
     }
 
@@ -43,11 +43,11 @@ public class Transfer {
         return value;
     }
 
-    public void setSenderID(Integer senderID) {
+    public void setSenderID(String senderID) {
         this.senderID = senderID;
     }
 
-    public void setReceiverID(Integer receiverID) {
+    public void setReceiverID(String receiverID) {
         this.receiverID = receiverID;
     }
 

@@ -16,10 +16,10 @@ public class Client {
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "cardNumber")
+    @Column(name = "cardNumber", nullable = false)
     private String cardNumber;
 
-    @Column(name = "numericCode")
+    @Column(name = "numericCode", unique = true, nullable = false)
     private String numericCode;
 
     @Column(name = "name")

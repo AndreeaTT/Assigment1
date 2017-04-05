@@ -20,12 +20,12 @@
         </div>
     </c:if>
 
-    <h1 cssStyle="color: red;">Client Detail</h1>
+    <h1 cssStyle="color: red;">Account Detail</h1>
     <br />
 
     <div class="row">
-        <label class="col-sm-2">ID</label>
-        <div class="col-sm-10">${account.id}</div>
+        <label class="col-sm-2">IBAN</label>
+        <div class="col-sm-10">${account.iban}</div>
     </div>
 
     <div class="row">
@@ -36,6 +36,11 @@
     <div class="row">
         <label class="col-sm-2">Type</label>
         <div class="col-sm-10">${account.typeAccount}</div>
+    </div>
+
+    <div class="row">
+        <label class="col-sm-2">Balance</label>
+        <div class="col-sm-10">${account.amount}</div>
     </div>
 
     <div class="row">

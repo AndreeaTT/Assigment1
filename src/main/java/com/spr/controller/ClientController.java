@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.spr.model.History;
+import com.spr.model.Account;
 import com.spr.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +44,11 @@ public class ClientController {
 
     @RequestMapping(value="/create", method=RequestMethod.GET)
     public ModelAndView newClientPage() {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("client-add", "client", new Client());
         return mav;
     }
@@ -52,30 +57,34 @@ public class ClientController {
     public ModelAndView createNewClient(@ModelAttribute @Valid Client client,
                                       BindingResult result,
                                       final RedirectAttributes redirectAttributes) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors())
             return new ModelAndView("client-add");
 
-        ModelAndView mav = new ModelAndView();
         String message = "New client:  "+client.getName()+" was successfully created.";
         clientService.create(client);
 
         String action = "Create new client with ID:";
-        historyService.createClient(client.getId(), client.getId(), action);
+        historyService.createClient(LoginController.loggedUser, client.getId(), action);
 
-        mav.setViewName("redirect:/client-detail.html");
+        ModelAndView mav = new ModelAndView("redirect:/client/list.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
 
     @RequestMapping(value="/edit/{id}", method=RequestMethod.GET)
     public ModelAndView editClientPage(@PathVariable Integer id) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("client-edit");
         Client client = clientService.findById(id);
-
-        String action = "Edit client with ID:";
-        historyService.createClient(client.getId(), client.getId(), action);
-
         mav.addObject("client", client);
         return mav;
     }
@@ -85,20 +94,32 @@ public class ClientController {
                                  BindingResult result,
                                  @PathVariable Integer id,
                                  final RedirectAttributes redirectAttributes) throws ClientNotFound {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors())
             return new ModelAndView("client-edit");
 
-        ModelAndView mav = new ModelAndView("redirect:/client-detail.html");
         String message = "Client was successfully updated.";
         clientService.update(client);
 
+        String action = "Edit client with ID:";
+        historyService.createClient(LoginController.loggedUser, client.getId(), action);
+
+        ModelAndView mav = new ModelAndView("redirect:/client/list.html");
         redirectAttributes.addFlashAttribute("message", message);
         return mav;
     }
 
     @RequestMapping(value="/list", method=RequestMethod.GET)
     public ModelAndView clientListPage() {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("client-list");
         List<Client> clientList = clientService.findAllClients();
         mav.addObject("clientList", clientList);
@@ -107,6 +128,11 @@ public class ClientController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public ModelAndView showClientPage(@PathVariable Integer id) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
+
         ModelAndView mav = new ModelAndView("client-detail");
         Client client = clientService.findById(id);
         mav.addObject("client", client);
@@ -118,14 +144,27 @@ public class ClientController {
                                  BindingResult result,
                                  @PathVariable Integer id,
                                  final RedirectAttributes redirectAttributes) throws ClientNotFound{
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
         if (result.hasErrors())
-            return new ModelAndView("client-detail");
+            return new ModelAndView("home");
+        ModelAndView mav = new ModelAndView("client-detail");
+        return mav;
+    }
 
-        ModelAndView mav = new ModelAndView("redirect:/client-detail.html");
-        String message = "Client was successfully found.";
+    @RequestMapping(value="/accounts/{id}", method=RequestMethod.GET)
+    public ModelAndView showAccountPage(@PathVariable Integer id) {
+        if (LoginController.loggedUser.isEmpty())
+            return new ModelAndView("redirect:/login.html");
+        if (LoginController.role.equals("Admin"))
+            return new ModelAndView("redirect:/index.html");
 
-        redirectAttributes.addFlashAttribute("message", message);
+        ModelAndView mav = new ModelAndView("account-list");
+        List<Account> accountList = clientService.findAccountsByClientId(id);
+        mav.addObject("accountList", accountList);
         return mav;
     }
 }

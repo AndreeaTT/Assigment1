@@ -1,5 +1,7 @@
 package com.spr.validation;
 
+import com.spr.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -8,6 +10,9 @@ import com.spr.model.Client;
 
 @Component
 public class ClientValidator implements Validator {
+
+    @Autowired
+    private ClientService clientService;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -41,5 +46,10 @@ public class ClientValidator implements Validator {
         if (client.getName() != null)
         if (!(client.getName().matches("[a-zA-Z]+")))
             errors.rejectValue("name", "client.name.invalid");
+
+        if (client.getNumericCode() != null)
+            if (clientService.findClientByNumericCode(client.getNumericCode()) != null )
+                if (clientService.findClientByNumericCode(client.getNumericCode()).getId() != client.getId())
+                    errors.rejectValue("numericCode", "client.numericCode.duplicate");
     }
 }

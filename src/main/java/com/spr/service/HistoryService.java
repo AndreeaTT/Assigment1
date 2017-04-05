@@ -13,7 +13,9 @@ public interface HistoryService {
     public List<History> findHistory();
     public List<History> findByUser(Integer id);
     public History findById(Integer id);
-    public History createAccount(Integer userID, Integer accountID, Integer clientID, String action);
-    public History createClient(Integer userID, Integer clientID, String action);
+    public History createAccount(String userID, String accountIBAN, Integer clientID, String action);
+    public History createClient(String userID, Integer clientID, String action);
+    public History createTransfer(String userID, String sendIBAN, String receiveIBAN, String action);
     public void deleteAllEmployeeHistory(Integer id);
+    public List<History> getReportForPeriod(String data, Integer id);
 }
